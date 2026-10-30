@@ -1,20 +1,33 @@
 ﻿<#
 .SYNOPSIS
 Export Markdown using an installed Chromium browser or Firefox.
+.PARAMETER InputFile
+One or more literal file or folder paths. Folders select *.md files.
+.PARAMETER OutputDirectory
+Destination root; folder inputs preserve their relative subdirectories.
+.PARAMETER Recurse
+Include subfolders when expanding folder inputs.
+.PARAMETER Overwrite
+Allow replacement of an existing PDF only after rendering completes successfully.
+Without this switch, existing output files are never replaced.
 .PARAMETER Browser
 Executable path, or firefox/chrome/msedge. If omitted, prefer Edge/Chrome,
 then Firefox. Each export uses an isolated temporary browser profile.
 .EXAMPLE
 .\export.ps1 -InputFile .\notes.md -Browser firefox
 #>
-param([Parameter(Mandatory=$true)][string]$InputFile,[string]$OutputFile,[string]$Browser,[ValidateSet('original','github','night','newsprint','pixyll','whitey')][string]$Theme='github',[string]$CssFile)
+param([Parameter(Mandatory=$true)][ValidateNotNullOrEmpty()][string[]]$InputFile,[string]$OutputFile,[string]$Browser,[ValidateSet('original','github','night','newsprint','pixyll','whitey')][string]$Theme='github',[string]$CssFile,[switch]$Overwrite,[string]$OutputDirectory,[switch]$Recurse)
 $ErrorActionPreference='Stop'
 Add-Type -AssemblyName System.Net.Http
+
+# One-file rendering remains shared by single and batch invocations.
+function Export-MarkdownPdf([string]$InputFile, [string]$OutputFile) {
 $InputFile=(Resolve-Path -LiteralPath $InputFile).Path
 if(!$OutputFile){$OutputFile=[IO.Path]::ChangeExtension($InputFile,'.pdf')}
 $OutputFile=$ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputFile)
 if($OutputFile -eq $InputFile){throw 'OutputFile must differ from InputFile.'}
 if([IO.Directory]::Exists($OutputFile)){throw "OutputFile is a directory: $OutputFile"}
+if([IO.File]::Exists($OutputFile) -and !$Overwrite){throw "Output already exists: $OutputFile. Use -Overwrite to replace it, or choose another output path."}
 $outputDirectory=[IO.Path]::GetDirectoryName($OutputFile)
 try{
  [IO.Directory]::CreateDirectory($outputDirectory)|Out-Null
@@ -80,7 +93,16 @@ try{
  # Finish writing beside the destination before replacing an existing PDF.
  $pendingPdf=Join-Path ([IO.Path]::GetDirectoryName($OutputFile)) ('.mdpdf-'+[Guid]::NewGuid().ToString('N')+'.tmp')
  [IO.File]::WriteAllBytes($pendingPdf,[Convert]::FromBase64String($pdf))
- if([IO.File]::Exists($OutputFile)){[IO.File]::Replace($pendingPdf,$OutputFile,[NullString]::Value)}else{[IO.File]::Move($pendingPdf,$OutputFile)}
+ # Move never overwrites: also protects files created while rendering.
+ try{
+  if($Overwrite -and [IO.File]::Exists($OutputFile)){
+   [IO.File]::Replace($pendingPdf,$OutputFile,[NullString]::Value)
+  }else{
+   [IO.File]::Move($pendingPdf,$OutputFile)
+  }
+ }catch{
+  throw "Cannot commit PDF to '$OutputFile'. The destination may have appeared during export or be locked. Close programs using it and retry; use -Overwrite only if replacement is intended. Details: $($_.Exception.Message)"
+ }
  Write-Output "Exported: $OutputFile"
  Write-Output ($result|ConvertTo-Json -Compress)
 }finally{
@@ -92,3 +114,49 @@ try{
  $resolvedTmp=[IO.Path]::GetFullPath($tmp)
  if($resolvedTmp.StartsWith($tempRoot,[StringComparison]::OrdinalIgnoreCase) -and ([IO.Path]::GetFileName($resolvedTmp) -match '^mdpdf-[0-9a-f]{32}$') -and (Test-Path -LiteralPath $resolvedTmp)){Remove-Item -LiteralPath $resolvedTmp -Recurse -Force -ErrorAction SilentlyContinue}
 }
+}
+
+if($OutputFile -and $OutputDirectory){throw 'Use either OutputFile or OutputDirectory, not both.'}
+$singleFile=$InputFile.Count -eq 1 -and (Test-Path -LiteralPath $InputFile[0] -PathType Leaf)
+if($OutputFile -and !$singleFile){throw 'OutputFile requires one input file. Use OutputDirectory for multiple files or folders.'}
+$destinationRoot=if($OutputDirectory){$ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutputDirectory)}else{$null}
+if($singleFile){
+ $sourcePath=(Get-Item -LiteralPath $InputFile[0]).FullName
+ if($destinationRoot){$OutputFile=Join-Path $destinationRoot ([IO.Path]::ChangeExtension([IO.Path]::GetFileName($sourcePath),'.pdf'))}
+ Export-MarkdownPdf $sourcePath $OutputFile
+ return
+}
+
+# Plan the entire batch before exporting, so conflicting destinations never overwrite each other.
+$jobs=[Collections.Generic.List[object]]::new()
+$seen=@{};$destinations=@{}
+$succeeded=0;$skipped=0;$failed=0
+foreach($path in $InputFile){
+ try{
+  $item=Get-Item -LiteralPath $path
+  $files=if($item.PSIsContainer){@(Get-ChildItem -LiteralPath $item.FullName -Filter '*.md' -File -Recurse:$Recurse | Sort-Object FullName)}else{@($item)}
+  if(!$files.Count){Write-Output "Skipped folder (no matching Markdown): $($item.FullName)";$skipped++;continue}
+  foreach($file in $files){
+   if($seen.ContainsKey($file.FullName)){Write-Output "Skipped duplicate: $($file.FullName)";$skipped++;continue}
+   $seen[$file.FullName]=$true
+   $relative=if($item.PSIsContainer){$file.FullName.Substring($item.FullName.TrimEnd('\').Length+1)}else{$file.Name}
+   $output=if($destinationRoot){Join-Path $destinationRoot ([IO.Path]::ChangeExtension($relative,'.pdf'))}else{[IO.Path]::ChangeExtension($file.FullName,'.pdf')}
+   $job=[pscustomobject]@{Input=$file.FullName;Output=$output;Conflict=$false}
+   if($destinations.ContainsKey($output)){
+    $job.Conflict=$true
+    $destinations[$output].Conflict=$true
+   }else{$destinations[$output]=$job}
+   $jobs.Add($job)
+  }
+ }catch{Write-Warning "Failed input '$path': $($_.Exception.Message)";$failed++}
+}
+foreach($job in $jobs){
+ if($job.Conflict){Write-Warning "Output collision for '$($job.Input)': $($job.Output)";$failed++;continue}
+ if([IO.File]::Exists($job.Output) -and !$Overwrite){Write-Output "Skipped existing PDF: $($job.Output)";$skipped++;continue}
+ try{
+  Export-MarkdownPdf $job.Input $job.Output
+  $succeeded++
+ }catch{Write-Warning "Failed '$($job.Input)': $($_.Exception.Message)";$failed++}
+}
+Write-Output "Summary: $succeeded succeeded, $skipped skipped, $failed failed."
+if($failed){exit 1}

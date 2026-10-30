@@ -40,16 +40,42 @@ Node.js, npm, and Python are not required for normal use.
 .\export.ps1 -InputFile .\notes.md -OutputFile .\output\notes.pdf -Theme newsprint
 .\export.ps1 -InputFile .\notes.md -Browser firefox
 .\export.ps1 -InputFile .\notes.md -CssFile .\custom.css
+.\export.ps1 -InputFile .\a.md, .\b.md
+.\export.ps1 -InputFile .\notes -OutputDirectory .\pdfs
+.\export.ps1 -InputFile .\notes -Recurse -OutputDirectory .\pdfs
 ```
 
 The default theme is `github`. Available themes are `github`, `newsprint`, `night`,
 `pixyll`, and `whitey`; `original` remains an alias for `github`.
 
 The default output is a PDF beside the input Markdown. Existing output files are
-replaced after a successful export. Failed rendering preserves the previous PDF.
+rejected by default. Pass `-Overwrite` to explicitly allow replacement, for example:
+`./export.ps1 -InputFile ./notes.md -Overwrite`.
+Replacement happens only after a successful export. Failed rendering preserves the
+previous PDF. Without `-Overwrite`, even a destination created during rendering is
+not replaced. A locked destination causes an error rather than deletion of the old PDF.
 Output directories are created as needed. Use `-Browser` with `msedge`, `chrome`,
 `firefox`, or an executable path; automatic selection prefers Edge/Chrome.
 Each export uses a disposable browser profile.
+
+`-InputFile` accepts one or more literal file/folder paths. Folder inputs select
+`.md` files in that folder; add `-Recurse` to include subfolders. Each source creates
+one PDF. The theme, browser, custom CSS, and overwrite flag apply to the whole batch.
+
+`-OutputFile` is only valid with one explicit file. Use `-OutputDirectory` for a
+destination folder instead: folder inputs preserve paths relative to their root,
+while explicit files use their filenames. For example, `notes/sub/topic.md` becomes
+`pdfs/sub/topic.pdf` when importing `notes`. Without either output option, PDFs are
+written beside their source Markdown. The two output options cannot be combined.
+
+Batch inputs are de-duplicated by full source path, keeping the first occurrence.
+All jobs targeting a shared destination are rejected before those PDFs are written,
+even with `-Overwrite`; there is no automatic renaming or document merging.
+Existing PDFs are skipped unless `-Overwrite` is passed. Empty folders are skipped.
+Other failures do not stop the remaining jobs. A final summary reports succeeded,
+skipped (including duplicates/empty folders), and failed counts; any failure returns
+exit code 1. Single-file mode retains its existing output format and rejects an
+existing PDF unless `-Overwrite` is passed.
 
 Local images resolve relative to the Markdown file. Missing images, invalid TeX,
 or invalid Mermaid diagrams produce an error instead of a partial PDF.
@@ -106,6 +132,7 @@ Markdown extensions, and Mermaid fixtures to a temporary folder and print its lo
 
 ```powershell
 powershell -NoProfile -File .\tests\browser-export.ps1 -Browser 'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
+powershell -NoProfile -File .\tests\batch-export.ps1 -Browser msedge
 ```
 
 The PDFs named `tests/lec3_*.pdf` are original Typora references for manual comparison.
