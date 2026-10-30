@@ -1,0 +1,50 @@
+:root {font-family:Inter,"Segoe UI","Microsoft YaHei",sans-serif; color:#263735; background:#f3f5f2; font-synthesis:none;}
+* {box-sizing:border-box;}
+body {margin:0; height:100dvh; display:flex; flex-direction:column;}
+button,select,textarea {font:inherit;}
+button,select {border:1px solid #d4dcd5; border-radius:7px; background:#fff; color:inherit; padding:9px 12px;}
+button {cursor:pointer; white-space:nowrap;}
+button:hover:not(:disabled) {background:#edf2ec;}
+button:disabled {opacity:.45; cursor:default;}
+button:focus-visible,select:focus-visible,textarea:focus-visible {outline:2px solid #3e7864; outline-offset:2px;}
+.toolbar {display:flex; align-items:center; justify-content:space-between; gap:20px; padding:20px 26px; border-bottom:1px solid #dce2db; background:#fff;}
+.brand {display:flex; align-items:center; gap:13px;}
+.brand-icon {display:grid; place-items:center; width:42px; height:42px; background:#e8f0e9; color:#285442; font-size:20px; font-weight:700; border-radius:10px;}
+h1 {font-size:18px; letter-spacing:-.4px; margin:0 0 4px;}
+.brand p {margin:0; font-size:12px; color:#77857c;}
+.actions {display:flex; align-items:center; gap:9px; font-size:13px;}
+.theme-label {display:flex; align-items:center; gap:8px; margin:0 6px; color:#64756b;}
+button.primary {background:#2c604d; color:white; border-color:#2c604d;}
+button.primary:hover:not(:disabled) {background:#214c3d;}
+.primary span {margin-left:10px;}
+.workspace {display:grid; grid-template-columns:minmax(280px,36%) minmax(0,1fr); flex:1; min-height:0;}
+.editor-panel,.preview-panel {min-width:0; min-height:0; display:flex; flex-direction:column;}
+.editor-panel {background:#fafbf8; border-right:1px solid #dce2db;}
+.panel-heading {height:52px; flex-shrink:0; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:0 20px; font-size:12px; border-bottom:1px solid #e1e6df;}
+.panel-heading select {flex:1; min-width:0; padding:5px 8px; border:0; background:transparent; text-overflow:ellipsis;}
+.document-actions {display:flex; gap:6px;}
+.document-actions button {padding:6px 9px; font-size:12px;}
+#sync-scroll {padding:7px 10px; font-size:12px; font-weight:600; border-color:#668a75;}
+#sync-scroll[aria-pressed="true"] {background:#2c604d; border-color:#2c604d; color:#fff;}
+#sync-scroll[aria-pressed="true"]:hover {background:#214c3d;}
+#editor {width:100%; flex:1; min-height:160px; resize:none; border:0; background:transparent; padding:22px; font:13px/1.85 Consolas,"Microsoft YaHei",monospace; color:#344b40; tab-size:2;}
+#editor:focus {outline-offset:-3px;}
+.editor-footer {display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 20px; border-top:1px solid #e1e6df; font-size:11px; color:#7c887e;}
+.document-counts {display:flex; flex-wrap:wrap; gap:4px 12px;}
+#save-markdown {padding:8px 12px; font-size:13px; font-weight:600;}
+.muted {color:#879287; font-size:11px;}
+.preview-panel {background:#e8ede7;}
+.preview-scroll {overflow:auto; flex:1; padding:26px;}
+#preview {display:block; border:0; background:white; width:794px; min-height:1124px; margin:0 auto; box-shadow:0 3px 20px #243c2912;}
+.statusbar {display:flex; justify-content:space-between; align-items:center; gap:15px; padding:10px 22px; background:#fff; border-top:1px solid #dce2db; font-size:11px; color:#65786c; min-height:38px;}
+#status {overflow-wrap:anywhere;}
+#status[data-error="true"] {color:#b33829;}
+.print-hint {color:#879287; text-align:right;}
+#drop-overlay {position:fixed; inset:0; background:#eef6edf2; border:2px dashed #3e7864; border-radius:12px; display:grid; place-items:center; z-index:10;}
+#drop-overlay[hidden] {display:none;}
+#drop-overlay div {display:grid; gap:12px; text-align:center;}
+#drop-overlay strong {font-size:24px;}
+#drop-overlay span {font-size:14px; color:#6b7e70;}
+@media(max-width:1000px) {.toolbar{flex-wrap:wrap;padding:16px}.actions{flex-wrap:wrap}.brand p{display:none}.print-hint{display:none}.workspace{grid-template-columns:minmax(250px,38%) minmax(0,1fr)}.preview-scroll{padding:16px}}
+@media(max-width:650px) {body{height:auto;min-height:100dvh}.workspace{display:flex;flex-direction:column}.editor-panel{height:440px;border-right:0}.preview-panel{height:620px}.toolbar{gap:14px}.actions{gap:6px}.actions button,.actions select{padding:8px}.theme-label{margin:0}.statusbar{position:sticky;bottom:0}}
+@media print {.toolbar,.editor-panel,.panel-heading,.statusbar{display:none}body{display:block;height:auto}.workspace{display:block}.preview-scroll{overflow:visible;padding:0}#preview{box-shadow:none;}}

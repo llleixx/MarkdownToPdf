@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Markdown to PDF</title>
+  <link rel="stylesheet" href="app.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="toolbar">
+    <div class="brand"><span class="brand-icon" aria-hidden="true">M↓</span><div><h1>Markdown to PDF</h1><p>Write, preview, and export.</p></div></div>
+    <div class="actions">
+      <button id="open-files" type="button">Open files</button>
+      <button id="open-folder" type="button">Import folder</button>
+      <label class="theme-label">Theme <select id="theme"><option value="github">GitHub</option><option value="newsprint">Newsprint</option><option value="night">Night</option><option value="pixyll">Pixyll</option><option value="whitey">Whitey</option></select></label>
+      <button id="print" class="primary" type="button" disabled>Export PDF <span aria-hidden="true">↗</span></button>
+    </div>
+  </header>
+  <div class="workspace">
+    <section class="editor-panel" aria-label="Markdown editor">
+      <div class="panel-heading"><select id="document" aria-label="Document"><option value="">Untitled</option></select><div class="document-actions"><button id="new-document" type="button">New</button><button id="close-document" type="button" title="Close current document">Close</button></div></div>
+      <textarea id="editor" spellcheck="false" aria-label="Markdown content" placeholder="Paste Markdown or drop files here…"></textarea>
+      <div class="editor-footer"><div class="document-counts"><span id="asset-count">0 local images</span><span id="character-count">0 characters</span></div><button id="save-markdown" type="button" class="primary">Save .md ↓</button></div>
+    </section>
+    <section class="preview-panel" aria-label="PDF preview">
+      <div class="panel-heading"><span>Preview</span><button id="sync-scroll" type="button" aria-pressed="true" title="Toggle synchronized scrolling">Sync Scroll: On</button><span class="muted">A4 · Print styles</span></div>
+      <div class="preview-scroll"><iframe id="preview" src="preview.html" title="Document preview" sandbox="allow-scripts allow-same-origin allow-modals"></iframe></div>
+    </section>
+  </div>
+  <footer class="statusbar"><span id="status" role="status" aria-live="polite">Preparing preview…</span><span class="print-hint">Choose Save as PDF. Disable headers and footers; enable background graphics.</span></footer>
+  <div id="drop-overlay" hidden><div><strong>Drop to import documents and images</strong><span>Markdown, images, and folders</span></div></div>
+  <input id="files" type="file" accept=".md,.markdown,.txt,image/*" multiple hidden>
+  <input id="folder" type="file" webkitdirectory multiple hidden>
+</body>
+</html>

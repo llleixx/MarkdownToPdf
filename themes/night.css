@@ -1,0 +1,142 @@
+/* PDF content styles. Shared layout and spacing: print-common.css. */
+
+:root {
+    --bg-color: #363B40;
+    --diagram-theme: dark;
+    --code-comment: #a0abb7;
+    --code-keyword: #f0a0b5;
+    --code-string: #a5d6a7;
+    --code-number: #e8c27d;
+    --code-title: #a6c8ff;
+}
+
+html {
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+}
+
+html,
+body {
+    -webkit-text-size-adjust: 100%;
+    background: var(--bg-color);
+    fill: currentColor;
+    color: #b8bfc6;
+    border-color: transparent;
+    font-family: "Helvetica Neue", Helvetica, Arial, "Segoe UI Emoji", "SF Pro", "Microsoft YaHei", sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Lucida Grande", "Corbel", "Microsoft YaHei", sans-serif;
+    font-weight: normal;
+    clear: both;
+    word-wrap: break-word;
+    padding: 0;
+    color: #DEDEDE;
+}
+
+h1 {
+    font-size: 2.5rem;
+    letter-spacing: -1.5px;
+}
+
+h2 {
+    font-size: 1.63rem;
+    letter-spacing: -1px;
+    font-weight: bold;
+}
+
+h3 {
+    font-size: 1.17rem;
+    letter-spacing: -1px;
+    font-weight: bold;
+}
+
+h4 {
+    font-size: 1.12rem;
+    color: white;
+}
+
+h5 {
+    font-size: 0.97rem;
+    font-weight: bold;
+}
+
+h6 {
+    font-size: 0.93rem;
+    color: white;
+}
+
+p {
+    word-wrap: break-word;
+}
+
+ul,
+ol {
+    padding: 0 0 0 1.875rem;
+}
+
+ul {
+    list-style: square;
+}
+
+ol {
+    list-style: decimal;
+}
+
+i,
+em {
+    font-style: italic;
+}
+
+pre,
+code {
+    font-size: 0.875em;
+    font-family: Monaco, Consolas, "Andale Mono", "DejaVu Sans Mono", monospace;
+}
+
+code {
+    background: rgba(0, 0, 0, 0.05);
+    padding: 2px 5px;
+}
+
+hr {
+    height: 2px;
+    border: 0;
+    margin: 24px 0 !important;
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    background: #474d54;
+}
+
+a {
+    outline: 0;
+    color: #e0e0e0;
+    text-decoration: underline;
+}
+
+b,
+th,
+strong {
+    font-weight: bold;
+    color: #DEDEDE;
+}
+
+blockquote {
+    border-left: solid 2px #474d54;
+    color: #9DA2A6;
+}
+
+table a {
+    color: #DEDEDE;
+}
+
+th,
+td {
+    vertical-align: top;
+    border: solid 1px #474d54;
+}

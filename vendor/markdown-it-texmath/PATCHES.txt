@@ -1,0 +1,13 @@
+Upstream: markdown-it-texmath 1.0.0 (MIT), texmath.js.
+
+Local blockquote fix:
+Use open blockquote tokens instead of state.parentType to detect quoted math.
+After a prose paragraph, parentType may be "paragraph" even inside a quote.
+Remove at most the active quote depth of leading > markers per line, preserving
+newlines and any additional > that belongs to the formula. Parsing rules and
+delimiter expressions are otherwise unchanged.
+
+Block-rule registration:
+Add markdown-it's alt contexts (paragraph/reference/blockquote/list) so block
+math can interrupt prose without an empty line. This is registration metadata;
+the upstream parsers are unchanged and each rule is registered only once.

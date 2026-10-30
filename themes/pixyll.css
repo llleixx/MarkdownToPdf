@@ -1,0 +1,196 @@
+/* PDF content styles. Shared layout and spacing: print-common.css. */
+
+/**
+ * forked from pixyll.com
+ * MIT license
+ */
+
+@font-face {
+	font-family: "Merriweather";
+	font-style: normal;
+	font-weight: normal;
+	src: local("Merriweather Light"), local("Merriweather-Light"), url("./pixyll/merriweather-v19-latin-300.woff") format("woff");
+	unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: "Merriweather";
+	font-style: normal;
+	font-weight: bold;
+	src: local("Merriweather Heavy"), local("Merriweather-Heavy"), url("./pixyll/merriweather-v19-latin-700.woff") format("woff");
+	unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: "Merriweather";
+	font-style: italic;
+	font-weight: normal;
+	src: local("Merriweather Light Italic"), local("Merriweather-LightItalic"), url("./pixyll/merriweather-v19-latin-300italic.woff") format("woff");
+	unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: "Merriweather";
+	font-style: italic;
+	font-weight: bold;
+	src: local("Merriweather Heavy Italic"), local("Merriweather-HeavyItalic"), url("./pixyll/merriweather-v19-latin-700italic.woff") format("woff");
+	unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: "Lato";
+	font-style: normal;
+	font-weight: normal;
+	src: local("Lato Light"), local("Lato-Light"), url("./pixyll/lato-v14-latin-300.woff") format("woff");
+	unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: "Lato";
+	font-style: normal;
+	font-weight: bold;
+	src: local("Lato Black"), local("Lato-Blcak"), url("./pixyll/lato-v14-latin-900.woff") format("woff");
+	unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: "Lato";
+	font-style: italic;
+	font-weight: normal;
+	src: local("Lato LightItalic"), local("Lato-LightItalic"), url("./pixyll/lato-v14-latin-300italic.woff") format("woff");
+	unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: "Lato";
+	font-style: italic;
+	font-weight: bold;
+	src: local("Lato BlackItalic"), local("Lato-BlackItalic"), url("./pixyll/lato-v14-latin-900italic.woff") format("woff");
+	unicode-range: U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.5rem;
+}
+
+h3 {
+    font-size: 1.25rem;
+}
+
+p,
+.math-block,
+dl,
+h4,
+h5,
+h6,
+ol,
+ul {
+    font-size: 1.125rem;
+}
+
+h4 {
+    font-size: 1.13rem;
+}
+
+/*
+ Pixyll
+ A simple, beautiful theme for Jekyll that emphasizes content rather than aesthetic fluff.
+ Best served with BASSCSS (http://jxnblk.github.io/basscss)
+ Crafted with <3 by John Otander (@4lpine) - ©2015 John Otander MIT License http://opensource.org/licenses/MIT
+
+*/
+
+#write {
+    color: #333;
+}
+
+body {
+    font-family: "Merriweather", "PT Serif", Georgia, "Times New Roman", "STSong", "Segoe UI Emoji","SF Pro", Serif;
+    font-weight: 400;
+    font-size: 1.5rem;
+}
+
+table {
+    font-size: 1.125rem;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+    vertical-align: top;
+    border-top: 1px solid #333;
+}
+
+table > thead > tr > th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #333;
+}
+
+table > thead > tr:first-child > th,
+table > thead > tr:first-child > td {
+    border-top: 0;
+}
+
+p {
+    font-weight: 300;
+}
+
+pre,
+code {
+    font-family: Menlo, Monaco, "Courier New", monospace;
+}
+
+code {
+    color: #7a7a7a;
+}
+
+blockquote {
+    font-style: italic;
+    border-left: 5px solid #7a7a7a;
+    color: #555;
+}
+
+blockquote em {
+    color: #000;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Lato", "Helvetica Neue", Helvetica, sans-serif;
+}
+
+@media (max-width: 48em) {
+h1 {
+    font-size: 2.827rem;
+}
+
+h2 {
+    font-size: 1.999rem;
+}
+
+h3 {
+    font-size: 1.413rem;
+}
+
+h4 {
+    font-size: 1.3rem;
+}
+}
+
+a {
+    color: #463F5C;
+    text-decoration: underline;
+}
+
+li > *:last-child {
+    margin-bottom: 0;
+}
