@@ -7,6 +7,8 @@ a network connection.
 
 ## Web editor
 
+Online: **https://llleixx.github.io/MarkdownToPdf/**
+
 Open `web/index.html` in Edge or Chrome. No installation or build is needed.
 
 - Open or drop Markdown files and images. Import a folder to keep relative image paths.
@@ -23,6 +25,10 @@ For static hosting, publish the whole project with its directory structure intac
 and use `/web/` as the entry point. Publishing only the `web` folder will omit the
 shared renderer, themes, and libraries. Edge is the primary tested web browser;
 other browsers may differ in printing and file/folder drag-and-drop behavior.
+
+GitHub Pages deploys automatically on pushes to `main`, using
+`.github/workflows/pages.yml`. Only the web editor and its runtime resources are
+published to the site; CLI scripts and test documents are excluded from the site artifact.
 
 ## Command line
 
