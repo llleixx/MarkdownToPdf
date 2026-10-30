@@ -117,6 +117,8 @@ tests/                      Fixtures, regression scripts, and Typora reference P
 Preview CSS is isolated from the editor UI; rendering and print CSS are shared with
 the CLI. Keep library and theme license/credit files when distributing the project.
 `vendor/katex/dist/fonts` contains the math fonts referenced by KaTeX CSS.
+KaTeX keeps all font families/styles in WOFF2 format only; duplicate WOFF/TTF
+fallbacks are omitted. This distribution change is recorded in `vendor/katex/PATCHES.txt`.
 
 ## Development checks
 

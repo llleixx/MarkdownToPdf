@@ -1,0 +1,9 @@
+Local distribution change: WOFF2-only math fonts.
+
+Keep all 20 KaTeX font families/styles in WOFF2 format. Remove the duplicate
+WOFF and TTF files and their fallback URLs from both dist/katex.css and
+dist/katex.min.css. JavaScript, font metrics, glyph coverage, and licenses
+are unchanged. Theme fonts outside this directory are unchanged.
+
+When updating KaTeX, reapply this change to both CSS files together with the
+font files, then verify all font-face URLs and formula rendering.
